@@ -1,4 +1,7 @@
-local Runtime = require(script.Parent.Runtime)
+--!nolint LocalShadow
+local Package = script.Parent
+
+local useEventCallback = require(Package.Runtime.useEventCallback)
 
 --[=[
 	@within Plasma
@@ -53,10 +56,10 @@ local Runtime = require(script.Parent.Runtime)
 	print(ref.button.Text) --> hi
 	```
 ]=]
-local function create(className, props)
-	props = props or {}
+local function create(className: string, props: {[any]: any}?)
+	local props = props or {}
 
-	local eventCallback = Runtime.useEventCallback()
+	local eventCallback = useEventCallback()
 
 	local instance = Instance.new(className)
 

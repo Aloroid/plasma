@@ -9,10 +9,15 @@
 ]=]
 
 local RunService = game:GetService("RunService")
-local Runtime = require(script.Parent.Parent.Runtime)
 
-return Runtime.widget(function()
-	local refs = Runtime.useInstance(function(ref)
+local Package = script.Parent.Parent
+
+local widget = require(Package.Runtime.widget)
+local useEffect = require(Package.Runtime.useEffect)
+local useInstance = require(Package.Runtime.useInstance)
+
+return widget(function()
+	local refs = useInstance(function(ref)
 		local Frame = Instance.new("Frame")
 		Frame.BackgroundTransparency = 1
 		Frame.Size = UDim2.new(0, 100, 0, 100)
@@ -30,7 +35,7 @@ return Runtime.widget(function()
 		return Frame
 	end)
 
-	Runtime.useEffect(function()
+	useEffect(function()
 		local connection = RunService.RenderStepped:Connect(function()
 			refs.frame.ImageLabel.Rotation = os.clock() * 100 % 360
 		end)

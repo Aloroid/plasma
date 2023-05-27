@@ -4,7 +4,7 @@ local Plasma = require(ReplicatedStorage.Plasma)
 
 return function(target)
 	local root = Plasma.new(target)
-
+	
 	local connection = RunService.Heartbeat:Connect(function()
 		Plasma.start(root, function()
 			Plasma.portal(workspace, function()

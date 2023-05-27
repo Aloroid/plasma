@@ -8,12 +8,15 @@
 ]=]
 
 local Lighting = game:GetService("Lighting")
-local Runtime = require(script.Parent.Parent.Runtime)
+
+local Package = script.Parent.Parent
+
+local useInstance = require(Package.Runtime.useInstance)
 local portal = require(script.Parent.portal)
 
-return function(size)
+return function(size: number)
 	portal(Lighting, function()
-		Runtime.useInstance(function()
+		useInstance(function()
 			local blur = Instance.new("BlurEffect")
 			blur.Size = size
 			return blur

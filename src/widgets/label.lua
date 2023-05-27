@@ -1,7 +1,10 @@
-local Runtime = require(script.Parent.Parent.Runtime)
-local create = require(script.Parent.Parent.create)
-local Style = require(script.Parent.Parent.Style)
-local automaticSize = require(script.Parent.Parent.automaticSize)
+local Package = script.Parent.Parent
+
+local widget = require(Package.Runtime.widget)
+local useInstance = require(Package.Runtime.useInstance)
+local create = require(Package.create)
+local Style = require(Package.Style)
+local automaticSize = require(Package.automaticSize)
 
 --[=[
 	@within Plasma
@@ -11,8 +14,8 @@ local automaticSize = require(script.Parent.Parent.automaticSize)
 
 	Text.
 ]=]
-return Runtime.widget(function(text)
-	local refs = Runtime.useInstance(function(ref)
+return widget(function(text: string)
+	local refs = useInstance(function(ref)
 		local style = Style.get()
 
 		create("TextLabel", {

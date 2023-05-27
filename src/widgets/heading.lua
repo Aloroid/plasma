@@ -1,6 +1,14 @@
-local Runtime = require(script.Parent.Parent.Runtime)
-local create = require(script.Parent.Parent.create)
-local Style = require(script.Parent.Parent.Style)
+--!nolint LocalShadow
+local Package = script.Parent.Parent
+
+local widget = require(Package.Runtime.widget)
+local useInstance = require(Package.Runtime.useInstance)
+local create = require(Package.create)
+local Style = require(Package.Style)
+
+type HeaderOptions = {
+	font: Enum.Font,
+}
 
 --[=[
 	@within Plasma
@@ -11,9 +19,9 @@ local Style = require(script.Parent.Parent.Style)
 
 	Text, but bigger!
 ]=]
-return Runtime.widget(function(text, options)
-	options = options or {}
-	local refs = Runtime.useInstance(function(ref)
+return widget(function(text: string, options: HeaderOptions?)
+	local options = options or {}
+	local refs = useInstance(function(ref)
 		local style = Style.get()
 
 		return create("TextLabel", {

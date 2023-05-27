@@ -1,22 +1,34 @@
+--!nolint LocalShadow
 local UserInputService = game:GetService("UserInputService")
 
-local Runtime = require(script.Parent.Parent.Runtime)
-local Style = require(script.Parent.Parent.Style)
-local create = require(script.Parent.Parent.create)
-local createConnect = require(script.Parent.Parent.createConnect)
+local Package = script.Parent.Parent
 
-return Runtime.widget(function(options)
+local widget = require(Package.Runtime.widget)
+local useState = require(Package.Runtime.useState)
+local useInstance = require(Package.Runtime.useInstance)
+local createConnect = require(Package.createConnect)
+local Style = require(Package.Style)
+local create = require(Package.create)
+
+type SliderOptions = {
+	max: number?,
+	min: number?,
+	initial: number?
+}
+
+return widget(function(options: SliderOptions | number)
 	if type(options) == "number" then
 		options = {
 			max = options,
 		}
 	end
+	local options = options :: SliderOptions
 
 	local min = options.min or 0
 	local max = options.max or 1
-	local value, setValue = Runtime.useState(options.initial or 0)
+	local value, setValue = useState(options.initial or 0)
 
-	local refs = Runtime.useInstance(function(ref)
+	local refs = useInstance(function(ref)
 		local connect = createConnect()
 
 		local style = Style.get()

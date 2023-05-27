@@ -22,13 +22,17 @@
 	```
 ]=]
 
-local Runtime = require(script.Parent.Parent.Runtime)
-local Style = require(script.Parent.Parent.Style)
-local create = require(script.Parent.Parent.create)
+local Package = script.Parent.Parent
 
-return Runtime.widget(function(text)
-	local clicked, setClicked = Runtime.useState(false)
-	local refs = Runtime.useInstance(function(ref)
+local widget = require(Package.Runtime.widget)
+local useState = require(Package.Runtime.useState)
+local useInstance = require(Package.Runtime.useInstance)
+local Style = require(Package.Style)
+local create = require(Package.create)
+
+return widget(function(text: string)
+	local clicked, setClicked = useState(false)
+	local refs = useInstance(function(ref)
 		local style = Style.get()
 
 		return create("TextButton", {

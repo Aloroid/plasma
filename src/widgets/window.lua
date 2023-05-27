@@ -1,3 +1,4 @@
+--!nolint LocalShadow
 local GuiService = game:GetService("GuiService")
 local UserInputService = game:GetService("UserInputService")
 
@@ -32,19 +33,34 @@ local UserInputService = game:GetService("UserInputService")
 	![Window with checkboxes](https://i.eryn.io/2150/TVkkOnxj.png)
 ]=]
 
-local Runtime = require(script.Parent.Parent.Runtime)
-local createConnect = require(script.Parent.Parent.createConnect)
-local Style = require(script.Parent.Parent.Style)
-local automaticSize = require(script.Parent.Parent.automaticSize)
-local c = require(script.Parent.Parent.create)
+local Package = script.Parent.Parent
+
+local widget = require(Package.Runtime.widget)
+local useState = require(Package.Runtime.useState)
+local useEffect = require(Package.Runtime.useEffect)
+local useInstance = require(Package.Runtime.useInstance)
+local createConnect = require(Package.createConnect)
+local scope = require(Package.Runtime.scopeRuntime)
+local Style = require(Package.Style)
+local automaticSize = require(Package.automaticSize)
+local c = require(Package.create)
 
 local MIN_SIZE = Vector2.new(50, 50)
 local MAX_SIZE = Vector2.new(1500, 500)
 
-return Runtime.widget(function(options, fn)
-	local closed, setClosed = Runtime.useState(false)
+type WindowOptions = {
+	title: string?,
+	movable: boolean?,
+	resizable: boolean?,
+	closable: boolean?,
+	maxSize: (Vector2 | UDim2)?,
+	minSize: Vector2?,
+}
 
-	local refs = Runtime.useInstance(function(ref)
+return widget(function(options: WindowOptions | string, fn: () -> ())
+	local closed, setClosed = useState(false)
+
+	local refs = useInstance(function(ref)
 		local style = Style.get()
 
 		local dragConnection
@@ -260,6 +276,8 @@ return Runtime.widget(function(options, fn)
 		}
 	end
 
+	local options = options :: WindowOptions
+
 	local movable = if options.movable ~= nil then options.movable else true
 	local resizable = if options.resizable ~= nil then options.movable else true
 
@@ -273,15 +291,15 @@ return Runtime.widget(function(options, fn)
 	local spaces = if movable then "  " else ""
 	refs.title.Text = options.title and spaces .. string.upper(options.title) or ""
 
-	Runtime.useEffect(function()
+	useEffect(function()
 		refs.container:SetAttribute("maxSize", options.maxSize or MAX_SIZE)
 	end, options.maxSize)
 
-	Runtime.useEffect(function()
+	useEffect(function()
 		refs.container:SetAttribute("minSize", options.minSize)
 	end, options.minSize)
 
-	Runtime.scope(fn)
+	scope(fn)
 
 	local handle = {
 		closed = function()

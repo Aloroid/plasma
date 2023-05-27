@@ -1,7 +1,9 @@
-local Runtime = require(script.Parent.Runtime)
+local Package = script.Parent
+
+local useEventCallback = require(Package.Runtime.useEventCallback)
 
 local function createConnect()
-	local eventCallback = Runtime.useEventCallback()
+	local eventCallback = useEventCallback()
 
 	return function(instance, eventName, handler)
 		if eventCallback then

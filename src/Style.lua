@@ -1,6 +1,10 @@
-local Runtime = require(script.Parent.Runtime)
+local Package = script.Parent
 
-local ContextKey = Runtime.createContext("Style")
+local createContext = require(Package.Runtime.createContext)
+local useContext = require(Package.Runtime.useContext)
+local provideContext = require(Package.Runtime.provideContext)
+
+local ContextKey = createContext("Style")
 
 local defaultStyle = {
 	bg1 = Color3.fromRGB(31, 31, 31),
@@ -20,8 +24,8 @@ local Style = {}
 	Returns the current style information, with styles that are set more recently in the tree overriding styles that
 	were set further up. In this way, styles cascade downwards, similar to CSS.
 ]=]
-function Style.get()
-	return Runtime.useContext(ContextKey) or defaultStyle
+function Style.get(): { [string]: any }
+	return useContext(ContextKey) or defaultStyle
 end
 
 --[=[
@@ -32,8 +36,8 @@ end
 
 	Defines style for any subsequent calls in this scope. Merges with any existing styles.
 ]=]
-function Style.set(styleFragment)
-	local existing = Runtime.useContext(ContextKey) or defaultStyle
+function Style.set(styleFragment: { [string]: any })
+	local existing = useContext(ContextKey) or defaultStyle
 	local newStyle = {}
 
 	for key, value in pairs(existing) do
@@ -44,7 +48,7 @@ function Style.set(styleFragment)
 		newStyle[key] = value
 	end
 
-	Runtime.provideContext(ContextKey, newStyle)
+	provideContext(ContextKey, newStyle)
 end
 
 return Style
