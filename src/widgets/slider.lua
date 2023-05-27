@@ -13,7 +13,7 @@ local create = require(Package.create)
 type SliderOptions = {
 	max: number?,
 	min: number?,
-	initial: number?
+	initial: number?,
 }
 
 return widget(function(options: SliderOptions | number)
