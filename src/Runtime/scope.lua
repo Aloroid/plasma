@@ -6,27 +6,9 @@ local newStackFrame = require(Package.Runtime.newStackFrame)
 local destroyNode = require(Package.Runtime.destroyNode)
 local errorWidget = require(Package.widgets.error)
 
-local init = false
 local stack = sharedState.stack
 
 local function scope<R, T...>(level: number, scopeKey: string, fn: (T...) -> R?, ...: T...): R
-	-- hacky solution to stop cyclic requires, wraps error
-	-- inside a widget with it's own widget function.
-	if init == false then
-		init = true
-
-		local function widget(fn)
-			local file, line = debug.info(2, "sl")
-			local scopeKey = string.format("%s+%d", file, line)
-
-			return function(...)
-				return scope(2, scopeKey, fn, ...)
-			end
-		end
-
-		errorWidget = widget(errorWidget)
-	end
-
 	local parentFrame = stack[#stack]
 	local parentNode = parentFrame.node
 
@@ -87,5 +69,18 @@ local function scope<R, T...>(level: number, scopeKey: string, fn: (T...) -> R?,
 
 	return widgetHandle
 end
+
+-- hacky solution to stop cyclic requires, wraps error
+-- inside a widget with it's own widget function.
+local function widget(fn)
+	local file, line = debug.info(2, "sl")
+	local scopeKey = string.format("%s+%d", file, line)
+
+	return function(...)
+		return scope(2, scopeKey, fn, ...)
+	end
+end
+
+errorWidget = widget(errorWidget)
 
 return scope
