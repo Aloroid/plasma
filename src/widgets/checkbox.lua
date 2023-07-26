@@ -1,3 +1,4 @@
+--!nolint LocalShadow
 --[=[
 	@within Plasma
 	@function checkbox
@@ -36,16 +37,26 @@
 	```
 ]=]
 
-local Runtime = require(script.Parent.Parent.Runtime)
-local create = require(script.Parent.Parent.create)
+local Package = script.Parent.Parent
 
-return Runtime.widget(function(text, options)
-	options = options or {}
+local widget = require(Package.Runtime.widget)
+local useState = require(Package.Runtime.useState)
+local useEffect = require(Package.Runtime.useEffect)
+local useInstance = require(Package.Runtime.useInstance)
+local create = require(Package.create)
 
-	local checked, setChecked = Runtime.useState(false)
-	local clicked, setClicked = Runtime.useState(false)
+type CheckboxOptions = {
+	disabled: boolean?,
+	checked: boolean?,
+}
 
-	local refs = Runtime.useInstance(function(ref)
+return widget(function(text: string, options: CheckboxOptions?)
+	local options = options or {}
+
+	local checked, setChecked = useState(false)
+	local clicked, setClicked = useState(false)
+
+	local refs = useInstance(function(ref)
 		local Checkbox = create("Frame", {
 			[ref] = "checkbox",
 			BackgroundTransparency = 1,
@@ -98,7 +109,7 @@ return Runtime.widget(function(text, options)
 	instance.TextLabel.Text = text
 	instance.TextButton.AutoButtonColor = not options.disabled
 
-	Runtime.useEffect(function()
+	useEffect(function()
 		local isChecked
 		if options.checked ~= nil then
 			isChecked = options.checked
@@ -109,7 +120,7 @@ return Runtime.widget(function(text, options)
 		instance.TextButton.Text = isChecked and "✓" or ""
 	end, options.checked, checked)
 
-	Runtime.useEffect(function()
+	useEffect(function()
 		instance.TextButton.BackgroundColor3 = options.disabled and Color3.fromRGB(112, 112, 112)
 			or Color3.fromRGB(54, 54, 54)
 	end, options.disabled)

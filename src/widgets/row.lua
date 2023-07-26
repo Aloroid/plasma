@@ -8,10 +8,18 @@
 	Lays out children horizontally
 ]=]
 
-local Runtime = require(script.Parent.Parent.Runtime)
-local automaticSize = require(script.Parent.Parent.automaticSize)
+local Package = script.Parent.Parent
 
-return Runtime.widget(function(options, fn)
+local widget = require(Package.Runtime.widget)
+local scope = require(Package.Runtime.scopeRuntime)
+local useInstance = require(Package.Runtime.useInstance)
+local automaticSize = require(Package.automaticSize)
+
+type RowOptions = {
+	padding: Vector2?,
+}
+
+return widget(function(options, fn)
 	if type(options) == "function" and fn == nil then
 		fn = options
 		options = {}
@@ -25,7 +33,7 @@ return Runtime.widget(function(options, fn)
 		options.padding = UDim.new(0, 10)
 	end
 
-	local refs = Runtime.useInstance(function(ref)
+	local refs = useInstance(function(ref)
 		local Frame = Instance.new("Frame")
 		Frame.BackgroundTransparency = 1
 
@@ -46,5 +54,5 @@ return Runtime.widget(function(options, fn)
 
 	frame.UIListLayout.HorizontalAlignment = options.alignment or Enum.HorizontalAlignment.Left
 
-	Runtime.scope(fn)
-end)
+	scope(fn)
+end) :: ((options: RowOptions?, children: () -> ()) -> ()) & ((children: () -> ()) -> ())

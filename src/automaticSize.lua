@@ -1,3 +1,6 @@
+--!nocheck
+-- can't stop complaining about enum.automaticsize[] is not a table
+
 local RunService = game:GetService("RunService")
 local CollectionService = game:GetService("CollectionService")
 local function applyLayout(container, layout)
@@ -118,6 +121,12 @@ end
 
 local defaultOptions = {}
 
+type AutomaticSizeOptions = {
+	axis: Enum.AutomaticSize,
+	maxSize: (Vector2 | UDim2)?,
+	minSize: Vector2?,
+}
+
 --[=[
 	@within Plasma
 	@function automaticSize
@@ -143,7 +152,7 @@ local defaultOptions = {}
 	it is always applied to that instance.
 	:::
 ]=]
-local function automaticSize(container, options)
+local function automaticSize(container: GuiObject, options: AutomaticSizeOptions?)
 	options = options or defaultOptions
 
 	if options.maxSize then

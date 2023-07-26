@@ -22,12 +22,16 @@
 	```
 ]=]
 
-local Runtime = require(script.Parent.Parent.Runtime)
+local Package = script.Parent.Parent
 
-return Runtime.widget(function(targetInstance, fn)
-	Runtime.useInstance(function()
+local widget = require(Package.Runtime.widget)
+local scope = require(Package.Runtime.scopeRuntime)
+local useInstance = require(Package.Runtime.useInstance)
+
+return widget(function(targetInstance: Instance, children: () -> ())
+	useInstance(function()
 		return nil, targetInstance
 	end)
 
-	Runtime.scope(fn)
+	scope(children)
 end)

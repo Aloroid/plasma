@@ -1,8 +1,10 @@
-local Runtime = require(script.Parent.Parent.Runtime)
-local create = require(script.Parent.Parent.create)
+local Package = script.Parent.Parent
 
-return Runtime.widget(function(text)
-	local refs = Runtime.useInstance(function(ref)
+local useInstance = require(Package.Runtime.useInstance)
+local create = require(Package.create)
+
+return function(text)
+	local refs = useInstance(function(ref)
 		return create("Frame", {
 			[ref] = "error",
 			BackgroundTransparency = 0,
@@ -48,4 +50,4 @@ return Runtime.widget(function(text)
 	local instance = refs.error
 
 	instance.error.Text = text
-end)
+end

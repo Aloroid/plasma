@@ -1,5 +1,18 @@
-local Runtime = require(script.Parent.Parent.Runtime)
-local create = require(script.Parent.Parent.create)
+--!nolint LocalShadow
+local Package = script.Parent.Parent
+
+local widget = require(Package.Runtime.widget)
+local useEffect = require(Package.Runtime.useEffect)
+local useInstance = require(Package.Runtime.useInstance)
+local create = require(Package.create)
+
+type HighlightOptions = {
+	outlineColor: Color3?,
+	fillColor: Color3?,
+	fillTransparency: Color3?,
+	outlineTransparency: Color3?,
+	depthMode: Enum.HighlightDepthMode?,
+}
 
 --[=[
 	@interface HighlightOptions
@@ -21,10 +34,10 @@ local create = require(script.Parent.Parent.create)
 
 	Creates a highlight over an instance with the specified options, using the Roblox [Highlight] instance
 ]=]
-return Runtime.widget(function(adornee, options)
-	options = options or {}
+return widget(function(adornee: PVInstance, options: HighlightOptions?)
+	local options = options or {}
 
-	local refs = Runtime.useInstance(function(ref)
+	local refs = useInstance(function(ref)
 		return create("Highlight", {
 			[ref] = "highlight",
 		})
@@ -32,7 +45,7 @@ return Runtime.widget(function(adornee, options)
 
 	refs.highlight.Adornee = adornee
 
-	Runtime.useEffect(function()
+	useEffect(function()
 		refs.highlight.OutlineColor = options.outlineColor or Color3.new(1, 1, 1)
 		refs.highlight.FillColor = options.fillColor or Color3.new(1, 0, 0)
 	end, options.fillColor, options.outlineColor)

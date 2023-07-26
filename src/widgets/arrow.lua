@@ -1,3 +1,4 @@
+--!nolint LocalShadow
 --[=[
 	@within Plasma
 	@function arrow
@@ -54,24 +55,29 @@ end
 local function update(body, point, from, to, scale)
 	body.Height = (from - to).magnitude - 2
 	body.CFrame = CFrame.lookAt(((from + to) / 2) - ((to - from).unit * 1), to)
-	point.CFrame = CFrame.lookAt((CFrame.lookAt(to, from) * CFrame.new(0, 0, -2 - ((scale - 1) / 2))).p, to)
+	point.CFrame = CFrame.lookAt((CFrame.lookAt(to, from) * CFrame.new(0, 0, -2 - ((scale - 1) / 2))).Position, to)
 end
 
-local Runtime = require(script.Parent.Parent.Runtime)
+local Package = script.Parent.Parent
 
-return Runtime.widget(function(from, to, color)
-	local fallbackColor = Runtime.useState(BrickColor.random().Color)
+local widget = require(Package.Runtime.widget)
+local useState = require(Package.Runtime.useState)
+local useInstance = require(Package.Runtime.useInstance)
+
+return widget(function(from: Vector3 | BasePart | CFrame, to: Vector3 | BasePart?, color: Color3?)
+	local fallbackColor = useState(BrickColor.random().Color)
 	color = color or fallbackColor
 
 	if typeof(from) == "Instance" then
+		local cframe
 		if from:IsA("BasePart") then
-			from = from.CFrame
+			cframe = from.CFrame
 		elseif from:IsA("Attachment") then
-			from = from.WorldCFrame
+			cframe = from.WorldCFrame
 		end
 
 		if to ~= nil then
-			from = from.p
+			from = cframe.Position
 		end
 	end
 
@@ -84,10 +90,13 @@ return Runtime.widget(function(from, to, color)
 	end
 
 	if typeof(from) == "CFrame" and to == nil then
-		local look = from.lookVector
-		to = from.p
+		local look = from.LookVector
+		to = from.Position
 		from = to + (look * -10)
 	end
+
+	local from = from :: Vector3
+	local to = to :: Vector3
 
 	if to == nil then
 		to = from
@@ -96,7 +105,7 @@ return Runtime.widget(function(from, to, color)
 
 	assert(typeof(from) == "Vector3" and typeof(to) == "Vector3", "Passed parameters are of invalid types")
 
-	local refs = Runtime.useInstance(function(ref)
+	local refs = useInstance(function(ref)
 		local container = Instance.new("Folder")
 		container.Name = "Arrow"
 

@@ -1,11 +1,24 @@
+--!nolint LocalShadow
 local RunService = game:GetService("RunService")
-local Runtime = require(script.Parent.Parent.Runtime)
-local Style = require(script.Parent.Parent.Style)
-local create = require(script.Parent.Parent.create)
-local automaticSize = require(script.Parent.Parent.automaticSize)
+local Package = script.Parent.Parent
 
-local cell = Runtime.widget(function(text, font)
-	local refs = Runtime.useInstance(function(ref)
+local widget = require(Package.Runtime.widget)
+local useState = require(Package.Runtime.useState)
+local useInstance = require(Package.Runtime.useInstance)
+local scope = require(Package.Runtime.scopeRuntime)
+local Style = require(Package.Style)
+local create = require(Package.create)
+local automaticSize = require(Package.automaticSize)
+
+type TableOptions = {
+	marginTop: number?,
+	selectable: boolean?,
+	font: Enum.Font?,
+	headings: boolean?,
+}
+
+local cell = widget(function(text, font)
+	local refs = useInstance(function(ref)
 		local style = Style.get()
 
 		return create("TextLabel", {
@@ -31,13 +44,13 @@ local cell = Runtime.widget(function(text, font)
 	refs.label.Text = text
 end)
 
-local row = Runtime.widget(function(columns, darken, selectable, font)
-	local clicked, setClicked = Runtime.useState(false)
-	local hovering, setHovering = Runtime.useState(false)
+local row = widget(function(columns, darken, selectable, font)
+	local clicked, setClicked = useState(false)
+	local hovering, setHovering = useState(false)
 
 	local selected = columns.selected
 
-	local refs = Runtime.useInstance(function(ref)
+	local refs = useInstance(function(ref)
 		return create("TextButton", {
 			[ref] = "row",
 			BackgroundTransparency = if darken then 0.7 else 1,
@@ -77,7 +90,7 @@ local row = Runtime.widget(function(columns, darken, selectable, font)
 
 	for _, column in ipairs(columns) do
 		if type(column) == "function" then
-			Runtime.scope(column)
+			scope(column)
 		else
 			cell(column, font)
 		end
@@ -115,10 +128,10 @@ end)
 
 	![Table](https://i.eryn.io/2227/NEc4Dmnv.png)
 ]=]
-return Runtime.widget(function(items, options)
-	options = options or {}
+return widget(function(items: { { string } }, options: TableOptions?)
+	local options = options or {}
 
-	Runtime.useInstance(function(ref)
+	useInstance(function(ref)
 		create("Frame", {
 			[ref] = "table",
 			BackgroundTransparency = 1,
@@ -161,7 +174,7 @@ return Runtime.widget(function(items, options)
 		return ref.table
 	end)
 
-	local selected, setSelected = Runtime.useState()
+	local selected, setSelected = useState()
 	local hovered
 
 	for i, columns in items do
@@ -190,6 +203,7 @@ return Runtime.widget(function(items, options)
 				setSelected(nil)
 				return selected
 			end
+			return nil
 		end,
 		hovered = function()
 			return hovered
