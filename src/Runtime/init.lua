@@ -8,6 +8,7 @@ local Runtime = {
 	scope = require(script.scopeRuntime),
 	widget = require(script.widget),
 	useState = require(script.useState),
+	useTween = require(script.useTween),
 	useInstance = require(script.useInstance),
 	useEffect = require(script.useEffect),
 	useKey = require(script.useKey),

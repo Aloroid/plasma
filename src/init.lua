@@ -14,6 +14,7 @@ return {
 	useState = Runtime.useState,
 	useInstance = Runtime.useInstance,
 	useEffect = Runtime.useEffect,
+	useTween = Runtime.useTween,
 	useKey = Runtime.useKey,
 	setEventCallback = Runtime.setEventCallback,
 
@@ -38,4 +39,5 @@ return {
 	space = require(script.widgets.space),
 	table = require(script.widgets.table),
 	highlight = require(script.widgets.highlight),
+	anchor = require(script.widgets.anchor),
 }

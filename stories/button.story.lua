@@ -1,11 +1,9 @@
- local RunService = game:GetService("RunService")
+local RunService = game:GetService("RunService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Plasma = require(ReplicatedStorage.Plasma)
 
 return function(target)
 	local root = Plasma.new(target)
-
-	local checked = false
 
 	local connection = RunService.Heartbeat:Connect(function()
 		Plasma.start(root, function()
@@ -22,4 +20,3 @@ return function(target)
 		Plasma.start(root, function() end)
 	end
 end
- 

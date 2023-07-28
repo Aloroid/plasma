@@ -1,7 +1,5 @@
 {
   "name": "plasma",
-  "servePort": 34873,
-
   "tree": {
     "$className": "DataModel",
     "StarterPlayer": {

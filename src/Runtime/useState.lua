@@ -41,10 +41,6 @@ local function useState<T>(initialValue: T?): (T, (newValue: T) -> ())
 	end
 
 	local function setter(newValue)
-		if type(newValue) == "function" then
-			newValue = newValue(states[key])
-		end
-
 		states[key] = newValue
 	end
 
