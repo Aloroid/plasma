@@ -13,18 +13,17 @@ local automaticSize = require(Package.automaticSize)
 type TableOptions = {
 	marginTop: number?,
 	selectable: boolean?,
-	font: Enum.Font?,
 	headings: boolean?,
 }
 
-local cell = widget(function(text, font)
+local cell = widget(function(text)
 	local refs = useInstance(function(ref)
 		local style = Style.get()
 
 		return create("TextLabel", {
 			[ref] = "label",
 			BackgroundTransparency = 1,
-			Font = Enum.Font.SourceSans,
+			Font = style.font,
 			AutomaticSize = Enum.AutomaticSize.XY,
 			TextColor3 = style.textColor,
 			TextSize = 20,
@@ -40,7 +39,6 @@ local cell = widget(function(text, font)
 		})
 	end)
 
-	refs.label.Font = font or Enum.Font.SourceSans
 	refs.label.Text = text
 end)
 
@@ -114,7 +112,7 @@ end)
 	@within Plasma
 	@function table
 	@param items {{string}}
-	@param options {marginTop?: number, selectable?: boolean, font?: Font, headings?: boolean}
+	@param options {marginTop?: number, selectable?: boolean, headings?: boolean}
 	@tag widgets
 
 	A table widget. Items is a list of rows, with each row being a list of cells.
@@ -179,14 +177,12 @@ return widget(function(items: { { string } }, options: TableOptions?)
 
 	for i, columns in items do
 		local selectable = options.selectable
-		local font = options.font
 
 		if options.headings and i == 1 then
 			selectable = false
-			font = Enum.Font.GothamBold
 		end
 
-		local currentRow = row(columns, i % 2 == 1, selectable, font)
+		local currentRow = row(columns, i % 2 == 1, selectable)
 
 		if currentRow:clicked() then
 			setSelected(columns)

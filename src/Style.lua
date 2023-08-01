@@ -12,6 +12,8 @@ local defaultStyle = {
 	bg3 = Color3.fromRGB(54, 54, 54),
 	mutedTextColor = Color3.fromRGB(147, 147, 147),
 	textColor = Color3.fromRGB(255, 255, 255),
+	font = Enum.Font.SourceSans,
+	headerFont = Enum.Font.GothamBold,
 }
 
 local Style = {}

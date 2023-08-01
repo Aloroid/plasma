@@ -39,7 +39,7 @@ return widget(function(text: string)
 			[ref] = "button",
 			BackgroundColor3 = style.bg3,
 			BorderSizePixel = 0,
-			Font = Enum.Font.SourceSans,
+			Font = style.font,
 			Size = UDim2.new(0, 100, 0, 40),
 			TextColor3 = style.textColor,
 			AutomaticSize = Enum.AutomaticSize.X,

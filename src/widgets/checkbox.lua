@@ -44,6 +44,7 @@ local useState = require(Package.Runtime.useState)
 local useEffect = require(Package.Runtime.useEffect)
 local useInstance = require(Package.Runtime.useInstance)
 local create = require(Package.create)
+local style = require(Package.Style)
 
 type CheckboxOptions = {
 	disabled: boolean?,
@@ -57,6 +58,7 @@ return widget(function(text: string, options: CheckboxOptions?)
 	local clicked, setClicked = useState(false)
 
 	local refs = useInstance(function(ref)
+		local style = style.get()
 		local Checkbox = create("Frame", {
 			[ref] = "checkbox",
 			BackgroundTransparency = 1,
@@ -86,7 +88,7 @@ return widget(function(text: string, options: CheckboxOptions?)
 
 			create("TextLabel", {
 				BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-				Font = Enum.Font.GothamMedium,
+				Font = style.font,
 				TextColor3 = Color3.fromRGB(203, 203, 203),
 				TextSize = 18,
 				AutomaticSize = Enum.AutomaticSize.X,

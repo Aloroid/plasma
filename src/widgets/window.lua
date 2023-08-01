@@ -164,7 +164,7 @@ return widget(function(options: WindowOptions | string, fn: () -> ())
 				c("TextLabel", {
 					[ref] = "title",
 					BackgroundTransparency = 1,
-					Font = Enum.Font.GothamBold,
+					Font = style.headerFont,
 					Size = UDim2.new(1, 0, 1, 0),
 					TextColor3 = style.mutedTextColor,
 					TextSize = 20,

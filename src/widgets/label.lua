@@ -21,7 +21,7 @@ return widget(function(text: string)
 		create("TextLabel", {
 			[ref] = "label",
 			BackgroundTransparency = 1,
-			Font = Enum.Font.SourceSans,
+			Font = style.font,
 			TextColor3 = style.textColor,
 			TextSize = 20,
 			RichText = true,
