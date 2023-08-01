@@ -16,7 +16,7 @@ local stack = sharedState.stack
 	This function can be used to skip expensive work if none of the dependencies have changed since the last run.
 	For example, you might use this to set a bunch of properties in a widget if any of the inputs change.
 ]=]
-local function useEffect(callback: (() -> ()) & (() -> () -> ()), ...)
+local function useEffect(callback: () -> (() -> ())?, ...)
 	local frame = stack[#stack]
 	local effects = frame.node.effects
 
@@ -53,4 +53,4 @@ local function useEffect(callback: (() -> ()) & (() -> () -> ()), ...)
 	end
 end
 
-return useEffect
+return useEffect :: ((callback: () -> (), ...any) -> ()) & (callback: () -> () -> (), ...any) -> ()
