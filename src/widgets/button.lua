@@ -44,6 +44,7 @@ return widget(function(text: string)
 			TextColor3 = style.textColor,
 			AutomaticSize = Enum.AutomaticSize.X,
 			TextSize = 21,
+			RichText = true,
 
 			create("UIPadding", {
 				PaddingLeft = UDim.new(0, 10),
